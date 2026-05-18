@@ -96,6 +96,15 @@ def scan():
             except:
                 continue
             score, age_h, is_breaking = calc_score(tw, acc)
+            raw  = tw.get("likeCount",0) + tw.get("retweetCount",0)*2 + tw.get("replyCount",0) + tw.get("quoteCount",0)
+            views = max(tw.get("viewCount",1), 1)
+            velocity = round(raw / age_h, 1)
+            eng_rate = round((raw / views) * 100, 2)
+            cf  = content_fit(tw.get("text",""))
+            eb  = elazig_bonus(tw.get("text",""))
+            rf  = risk_filter(tw.get("text",""))
+            src_mult  = 1.4 if acc.lower() in PRIORITY_SOURCES else 1.0
+            brk_mult  = 1.3 if is_breaking else 1.0
             results.append({
                 "username":    acc,
                 "text":        tw.get("text",""),
@@ -107,6 +116,13 @@ def scan():
                 "likes":       tw.get("likeCount", 0),
                 "retweets":    tw.get("retweetCount", 0),
                 "views":       tw.get("viewCount", 0),
+                "velocity":    velocity,
+                "eng_rate":    eng_rate,
+                "content_fit": cf,
+                "elazig_bonus": eb,
+                "risk_filter": rf,
+                "src_mult":    src_mult,
+                "brk_mult":    brk_mult,
             })
         time.sleep(0.5)
     results.sort(key=lambda x: x["score"], reverse=True)
