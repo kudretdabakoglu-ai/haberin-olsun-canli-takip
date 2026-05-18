@@ -88,8 +88,15 @@
   .meta-item { font-size: 12px; color: #999; }
   .tweet-link {
     font-size: 12px; color: #4a4a9a; text-decoration: none;
-    margin-left: auto; font-weight: 500;
+    font-weight: 500;
   }
+  .haber-yaz-btn {
+    font-size: 12px; font-weight: 600; padding: 6px 14px;
+    border-radius: 8px; border: 1px solid #111; background: #111;
+    color: #fff; cursor: pointer; white-space: nowrap;
+    margin-left: auto;
+  }
+  .haber-yaz-btn:active { opacity: 0.75; }
 
   .empty { text-align: center; padding: 60px 20px; color: #aaa; }
   .empty-title { font-size: 16px; color: #888; margin-bottom: 6px; }
@@ -143,9 +150,10 @@ document.getElementById('tara-link').href =
 async function loadResults() {
   document.getElementById('scan-time').textContent = 'Yükleniyor…';
   try {
-    const r = await fetch(`results.json?t=${Date.now()}`);
+    const r = await fetch(`results.json?t=${Date.now()}`, {cache: 'no-store'});
     if (!r.ok) throw new Error('Sonuç bulunamadı');
     const data = await r.json();
+    if (!data || !data.results) throw new Error('Veri boş');
     allResults = data.results || [];
     document.getElementById('scan-time').textContent = data.scan_time_tr || '';
     renderStats(data);
@@ -222,6 +230,8 @@ function card(r, rank) {
   const ageLabel = r.age_h < 1 ? `${Math.round(r.age_h*60)} dk önce` : `${r.age_h} sa önce`;
   const text     = r.text.length > 200 ? r.text.slice(0,197) + '…' : r.text;
   const urlHtml  = r.url ? `<a class="tweet-link" href="${r.url}" target="_blank">Tweet ↗</a>` : '';
+  const escapedText = r.text.replace(/`/g,'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  const escapedUrl  = (r.url||'').replace(/'/g,"\\'");
 
   return `
   <div class="card ${cardCls}">
@@ -237,8 +247,38 @@ function card(r, rank) {
       <span class="meta-item">🔁 ${r.retweets}</span>
       <span class="meta-item">👁 ${fmtNum(r.views)}</span>
       ${urlHtml}
+      <button class="haber-yaz-btn" onclick="haberYaz('${escapedText}','${r.username}','${escapedUrl}')">✍️ Haber Yaz</button>
     </div>
   </div>`;
+}
+
+function haberYaz(text, username, url) {
+  const prompt = `${text}\n\nKaynak: @${username}${url ? '\nURL: ' + url : ''}\n\nBu haberi Instagram, X (Twitter) ve Telegram için hazırla. Her platform için ayrı format yaz.`;
+  navigator.clipboard.writeText(prompt).then(() => {
+    showToast('📋 Kopyalandı — Claude\'a yapıştır, Ece yazacak');
+  }).catch(() => {
+    // Fallback: textarea ile kopyala
+    const ta = document.createElement('textarea');
+    ta.value = prompt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('📋 Kopyalandı — Claude\'a yapıştır, Ece yazacak');
+  });
+}
+
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(() => t.style.opacity = '0', 2500);
 }
 
 function fmtNum(n) {
