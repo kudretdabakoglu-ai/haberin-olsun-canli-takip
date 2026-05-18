@@ -114,7 +114,6 @@ def scan():
 
 if __name__ == "__main__":
     print(f"Tarama başlıyor — {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
-    os.makedirs("docs", exist_ok=True)
     results = scan()
     print(f"{len(results)} haber bulundu")
     output = {
@@ -123,6 +122,6 @@ if __name__ == "__main__":
         "count": len(results),
         "results": results
     }
-    with open("docs/results.json", "w", encoding="utf-8") as f:
+    with open("results.json", "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
-    print("docs/results.json kaydedildi.")
+    print("results.json kaydedildi.")
