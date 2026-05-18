@@ -5,108 +5,111 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Haberin Olsun — Haber Takip</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-         background: #f7f6f2; color: #111; font-size: 15px; min-height: 100vh; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+       background: #f7f6f2; color: #111; font-size: 14px; min-height: 100vh; }
 
-  .header {
-    background: #fff; border-bottom: 1px solid #e9e7e0;
-    padding: 14px 16px; position: sticky; top: 0; z-index: 10;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .brand { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
-  .scan-time { font-size: 12px; color: #888; }
+/* HEADER */
+.header { background: #fff; border-bottom: 1px solid #e9e7e0; padding: 0 16px;
+          height: 50px; display: flex; align-items: center; justify-content: space-between;
+          position: sticky; top: 0; z-index: 100; }
+.brand { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; }
+.scan-time { font-size: 11px; color: #888; }
 
-  .action-bar {
-    background: #fff; border-bottom: 1px solid #f0ede6;
-    padding: 10px 16px; display: flex; gap: 8px; align-items: center;
-  }
-  .tara-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: #111; color: #fff; border: none; border-radius: 10px;
-    padding: 9px 18px; font-size: 14px; font-weight: 600;
-    text-decoration: none; cursor: pointer;
-  }
-  .refresh-btn {
-    background: #f7f6f2; color: #111; border: 1px solid #ddd;
-    border-radius: 10px; padding: 9px 16px; font-size: 14px;
-    cursor: pointer;
-  }
-  .hint { font-size: 12px; color: #aaa; margin-left: 4px; }
+/* ACTION BAR */
+.action-bar { background: #fff; border-bottom: 1px solid #f0ede6;
+              padding: 8px 16px; display: flex; gap: 8px; align-items: center; }
+.tara-btn { display: inline-flex; align-items: center; gap: 5px; background: #111;
+            color: #fff; border: none; border-radius: 9px; padding: 8px 16px;
+            font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; }
+.refresh-btn { background: #f7f6f2; color: #111; border: 1px solid #ddd;
+               border-radius: 9px; padding: 8px 14px; font-size: 13px; cursor: pointer; }
+.hint { font-size: 11px; color: #bbb; }
 
-  .filters {
-    background: #fff; border-bottom: 1px solid #f0ede6;
-    padding: 8px 16px; display: flex; gap: 6px; overflow-x: auto;
-  }
-  .filter-btn {
-    font-size: 12px; padding: 5px 14px; border-radius: 20px;
-    border: 1px solid #ddd; background: #f7f6f2;
-    color: #888; white-space: nowrap; cursor: pointer;
-  }
-  .filter-btn.active { background: #111; color: #fff; border-color: #111; }
+/* FILTERS */
+.filters { background: #fff; border-bottom: 1px solid #f0ede6;
+           padding: 8px 16px; display: flex; gap: 6px; overflow-x: auto; }
+.filter-btn { font-size: 12px; padding: 5px 13px; border-radius: 20px;
+              border: 1px solid #ddd; background: #f7f6f2; color: #888;
+              white-space: nowrap; cursor: pointer; flex-shrink: 0; }
+.filter-btn.active { background: #111; color: #fff; border-color: #111; }
 
-  .content { max-width: 680px; margin: 0 auto; padding: 16px; }
+/* CONTENT */
+.content { max-width: 700px; margin: 0 auto; padding: 14px 14px 40px; }
 
-  .stats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-  .stat { font-size: 12px; background: #fff; border: 1px solid #e9e7e0;
-          border-radius: 20px; padding: 5px 12px; color: #555; }
-  .stat b { color: #111; }
+/* STATS */
+.stats { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+.stat { font-size: 12px; background: #fff; border: 1px solid #e9e7e0;
+        border-radius: 20px; padding: 4px 11px; color: #555; }
+.stat b { color: #111; }
 
-  .section-label {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.07em;
-    text-transform: uppercase; color: #bbb; margin: 20px 0 10px;
-  }
+/* SECTION */
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.07em;
+                 text-transform: uppercase; color: #bbb; margin: 18px 0 8px; }
 
-  .card {
-    background: #fff; border: 1px solid #e9e7e0; border-radius: 14px;
-    padding: 14px 16px; margin-bottom: 8px;
-    transition: box-shadow 0.1s;
-  }
-  .card:active { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-  .card.breaking { border-left: 3px solid #d63031; }
-  .card.priority { background: #fafaf7; }
+/* CARD */
+.card { background: #fff; border: 1px solid #e9e7e0; border-radius: 13px;
+        padding: 13px 15px; margin-bottom: 8px; }
+.card.breaking { border-left: 3px solid #d63031; }
+.card.priority { background: #fafaf8; border-color: #e0ddd6; }
 
-  .card-top { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
-  .rank { font-size: 13px; font-weight: 700; color: #111; min-width: 20px; }
-  .source { font-size: 13px; font-weight: 600; color: #555; }
-  .source.pri { color: #4a4a9a; }
+/* CARD TOP */
+.card-top { display: flex; align-items: center; gap: 5px; margin-bottom: 7px; flex-wrap: wrap; }
+.rank { font-size: 13px; font-weight: 700; color: #111; min-width: 18px; }
+.source { font-size: 12px; font-weight: 600; color: #666; }
+.source.pri { color: #4a4a9a; }
 
-  .badge {
-    font-size: 10px; font-weight: 700; border-radius: 4px;
-    padding: 2px 7px; letter-spacing: 0.04em;
-  }
-  .badge-sd  { background: #fff0ef; color: #d63031; border: 1px solid #f0b0a8; }
-  .badge-ho  { background: #f7f6f2; color: #888; border: 1px solid #ddd; }
-  .badge-el  { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
-  .badge-pri { background: #eef; color: #4a4a9a; border: 1px solid #c0c0f0; }
+/* BADGES */
+.badge { font-size: 10px; font-weight: 700; border-radius: 4px; padding: 2px 6px;
+         letter-spacing: 0.04em; white-space: nowrap; }
+.badge-sd   { background: #fff0ef; color: #d63031; border: 1px solid #f0b0a8; }
+.badge-ho   { background: #f7f6f2; color: #555; border: 1px solid #ddd; font-variant-numeric: tabular-nums; }
+.badge-el   { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+.badge-pri  { background: #eef; color: #4a4a9a; border: 1px solid #c0c0f0; }
+.badge-risk { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
+.badge-dm   { background: #f3e8ff; color: #9333ea; border: 1px solid #d8b4fe; }
 
-  .card-text {
-    font-size: 14px; line-height: 1.55; color: #111;
-    margin-bottom: 10px;
-  }
-  .card-meta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-  .meta-item { font-size: 12px; color: #999; }
-  .tweet-link {
-    font-size: 12px; color: #4a4a9a; text-decoration: none;
-    font-weight: 500;
-  }
-  .haber-yaz-btn {
-    font-size: 12px; font-weight: 600; padding: 6px 14px;
-    border-radius: 8px; border: 1px solid #111; background: #111;
-    color: #fff; cursor: pointer; white-space: nowrap;
-    margin-left: auto;
-  }
-  .haber-yaz-btn:active { opacity: 0.75; }
+/* TEXT */
+.card-text { font-size: 14px; line-height: 1.55; color: #111; margin-bottom: 10px; }
 
-  .empty { text-align: center; padding: 60px 20px; color: #aaa; }
-  .empty-title { font-size: 16px; color: #888; margin-bottom: 6px; }
+/* METRICS */
+.metrics { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+.metric { display: flex; flex-direction: column; gap: 1px; }
+.metric-val { font-size: 13px; font-weight: 600; color: #111; font-variant-numeric: tabular-nums; }
+.metric-lbl { font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 0.03em; }
+.metric-div { width: 1px; height: 26px; background: #eee; flex-shrink: 0; }
+.eng-bar-wrap { display: flex; align-items: center; gap: 5px; }
+.eng-bar { width: 44px; height: 3px; border-radius: 2px; background: #eee; overflow: hidden; }
+.eng-bar-fill { height: 100%; border-radius: 2px; background: #999; }
+.eng-bar-fill.high { background: #27ae60; }
+.eng-bar-fill.med  { background: #f39c12; }
 
-  .loading { text-align: center; padding: 40px; color: #888; font-size: 14px; }
+/* ÇARPANLAR */
+.mult-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.mult-tag { font-size: 10px; padding: 2px 7px; border-radius: 4px;
+            border: 1px solid #e0e0e0; color: #888; background: #f7f6f2; }
+.mult-tag.pos { color: #166534; background: #f0fff4; border-color: #6fcf97; }
+.mult-tag.neg { color: #dc2626; background: #fee2e2; border-color: #fca5a5; }
 
-  @media (max-width: 400px) {
-    .content { padding: 12px; }
-    .card { padding: 12px 14px; }
-  }
+/* CARD FOOTER */
+.card-footer { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.meta-item { font-size: 11px; color: #aaa; }
+.tweet-link { font-size: 12px; color: #4a4a9a; text-decoration: none; font-weight: 500; }
+.haber-btn { font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 8px;
+             border: 1px solid #111; background: #111; color: #fff; cursor: pointer;
+             margin-left: auto; flex-shrink: 0; }
+.haber-btn:active { opacity: 0.7; }
+
+/* EMPTY / LOADING */
+.empty { text-align: center; padding: 50px 20px; color: #aaa; }
+.empty-title { font-size: 15px; color: #888; margin-bottom: 6px; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+         background: #111; color: #fff; padding: 10px 20px; border-radius: 10px;
+         font-size: 13px; z-index: 999; opacity: 0; transition: opacity 0.25s;
+         pointer-events: none; white-space: nowrap; max-width: 90vw; text-align: center; }
+.toast.show { opacity: 1; }
 </style>
 </head>
 <body>
@@ -117,7 +120,7 @@
 </div>
 
 <div class="action-bar">
-  <a class="tara-btn" id="tara-link" href="#" target="_blank">⚡ Manuel Tara</a>
+  <a class="tara-btn" href="https://github.com/kudretdabakoglu-ai/haberin-olsun-canli-takip/actions/workflows/ho-tarama.yml" target="_blank">⚡ Manuel Tara</a>
   <button class="refresh-btn" onclick="loadResults()">↻ Yenile</button>
   <span class="hint">Tara → 30sn sonra yenile</span>
 </div>
@@ -131,65 +134,68 @@
 
 <div class="content">
   <div id="stats" class="stats"></div>
-  <div id="results" class="loading">Haberler yükleniyor…</div>
+  <div id="results" class="empty"><div class="empty-title">Yükleniyor…</div></div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-// GitHub repo bilgileri — kurulumdan sonra güncellenir
 const REPO_OWNER = "kudretdabakoglu-ai";
 const REPO_NAME  = "haberin-olsun-canli-takip";
 const WORKFLOW   = "ho-tarama.yml";
 
-let allResults = [];
+let allResults   = [];
 let activeFilter = 'all';
 
-// Manuel tara butonunu ayarla
-document.getElementById('tara-link').href =
-  `https://github.com/${REPO_OWNER}/${REPO_NAME}/actions/workflows/${WORKFLOW}`;
-
+// ── YÜKLE ──────────────────────────────────────────────────────────────
 async function loadResults() {
   document.getElementById('scan-time').textContent = 'Yükleniyor…';
   try {
-    const r = await fetch(`results.json?t=${Date.now()}`, {cache: 'no-store'});
-    if (!r.ok) throw new Error('Sonuç bulunamadı');
+    const r = await fetch(`results.json?t=${Date.now()}`, { cache: 'no-store' });
+    if (!r.ok) throw new Error('results.json bulunamadı');
     const data = await r.json();
-    if (!data || !data.results) throw new Error('Veri boş');
-    allResults = data.results || [];
+    if (!data || !Array.isArray(data.results)) throw new Error('Veri hatalı');
+    allResults = data.results;
     document.getElementById('scan-time').textContent = data.scan_time_tr || '';
     renderStats(data);
     renderResults();
   } catch(e) {
     document.getElementById('results').innerHTML =
       `<div class="empty"><div class="empty-title">Henüz tarama yapılmadı</div>
-       <div style="font-size:13px;margin-top:8px">GitHub Actions'tan "Manuel Tara" butonuna bas</div></div>`;
+       <div style="font-size:12px;margin-top:8px">⚡ Manuel Tara butonuna bas</div></div>`;
     document.getElementById('scan-time').textContent = '—';
   }
 }
 
+// ── STATS ───────────────────────────────────────────────────────────────
 function renderStats(data) {
-  const breaking = allResults.filter(r => r.is_breaking).length;
-  const elazig   = allResults.filter(r => r.text.toLowerCase().includes('elazığ') || r.text.toLowerCase().includes('elazig')).length;
-  document.getElementById('stats').innerHTML = `
-    <span class="stat">Toplam: <b>${data.count}</b></span>
-    <span class="stat">⚡ Son Dakika: <b>${breaking}</b></span>
-    <span class="stat">📍 Elazığ: <b>${elazig}</b></span>
-  `;
+  const brk = allResults.filter(r=>r.is_breaking).length;
+  const el  = allResults.filter(r=>r.elazig_bonus>1||hasElazig(r.text)).length;
+  document.getElementById('stats').innerHTML =
+    `<span class="stat">Toplam: <b>${data.count}</b></span>
+     <span class="stat">⚡ Son Dakika: <b>${brk}</b></span>
+     <span class="stat">📍 Elazığ: <b>${el}</b></span>`;
 }
 
+// ── FİLTRE ──────────────────────────────────────────────────────────────
 function setFilter(f, btn) {
   activeFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  renderResults();
+  if (allResults.length) renderResults();
 }
 
+function hasElazig(text) {
+  const t = (text||'').toLowerCase();
+  return ['elazığ','elazig','harput','fırat üniversitesi','elazığspor'].some(k=>t.includes(k));
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────────
 function renderResults() {
   let list = allResults;
-  if (activeFilter === 'breaking') list = list.filter(r => r.is_breaking);
-  if (activeFilter === 'priority') list = list.filter(r => r.is_priority);
-  if (activeFilter === 'elazig')   list = list.filter(r =>
-    r.text.toLowerCase().includes('elazığ') || r.text.toLowerCase().includes('elazig') ||
-    r.text.toLowerCase().includes('harput'));
+  if (activeFilter==='breaking') list = list.filter(r=>r.is_breaking);
+  if (activeFilter==='priority') list = list.filter(r=>r.is_priority);
+  if (activeFilter==='elazig')   list = list.filter(r=>r.elazig_bonus>1||hasElazig(r.text));
 
   if (!list.length) {
     document.getElementById('results').innerHTML =
@@ -197,97 +203,147 @@ function renderResults() {
     return;
   }
 
-  const breaking  = list.filter(r => r.is_breaking);
-  const priority  = list.filter(r => !r.is_breaking && r.is_priority);
-  const others    = list.filter(r => !r.is_breaking && !r.is_priority);
+  const breaking = list.filter(r=>r.is_breaking);
+  const priority = list.filter(r=>!r.is_breaking&&r.is_priority);
+  const others   = list.filter(r=>!r.is_breaking&&!r.is_priority);
 
   let html = '';
   if (breaking.length) {
     html += `<div class="section-label">⚡ Son Dakika</div>`;
-    html += breaking.map((r,i) => card(r, i+1)).join('');
+    html += breaking.map((r,i)=>card(r,i+1,allResults.indexOf(r))).join('');
   }
   if (priority.length) {
-    html += `<div class="section-label">⭐ Öncelikli — bpthaber · pusholder</div>`;
-    html += priority.map((r,i) => card(r, i+1)).join('');
+    html += `<div class="section-label">⭐ Öncelikli Kaynaklar — bpthaber · pusholder</div>`;
+    html += priority.map((r,i)=>card(r,i+1,allResults.indexOf(r))).join('');
   }
+  const oLabel = (breaking.length||priority.length) ? 'Diğer Haberler' : 'Haberler';
   if (others.length) {
-    const label = (breaking.length || priority.length) ? 'Diğer Haberler' : 'Haberler';
-    html += `<div class="section-label">${label}</div>`;
-    html += others.map((r,i) => card(r, i+1)).join('');
+    html += `<div class="section-label">${oLabel}</div>`;
+    html += others.map((r,i)=>card(r,i+1,allResults.indexOf(r))).join('');
   }
 
   document.getElementById('results').innerHTML = html;
 }
 
-function card(r, rank) {
-  const sdBadge  = r.is_breaking ? `<span class="badge badge-sd">Son Dakika</span>` : '';
-  const priBadge = r.is_priority ? `<span class="badge badge-pri">⭐</span>` : '';
-  const elBadge  = (r.text.toLowerCase().includes('elazığ') || r.text.toLowerCase().includes('elazig'))
-                   ? `<span class="badge badge-el">📍 Elazığ</span>` : '';
-  const hoBadge  = `<span class="badge badge-ho">HO: ${r.score}</span>`;
-  const srcCls   = r.is_priority ? 'source pri' : 'source';
-  const cardCls  = [r.is_breaking ? 'breaking' : '', r.is_priority ? 'priority' : ''].filter(Boolean).join(' ');
-  const ageLabel = r.age_h < 1 ? `${Math.round(r.age_h*60)} dk önce` : `${r.age_h} sa önce`;
-  const text     = r.text.length > 200 ? r.text.slice(0,197) + '…' : r.text;
-  const urlHtml  = r.url ? `<a class="tweet-link" href="${r.url}" target="_blank">Tweet ↗</a>` : '';
-  const escapedText = r.text.replace(/`/g,'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-  const escapedUrl  = (r.url||'').replace(/'/g,"\\'");
+// ── CARD ─────────────────────────────────────────────────────────────────
+function card(r, rank, idx) {
+  const cardCls = [r.is_breaking?'breaking':'', r.is_priority?'priority':''].filter(Boolean).join(' ');
+  const srcCls  = r.is_priority ? 'source pri' : 'source';
+
+  // Badges
+  const sdBadge   = r.is_breaking            ? `<span class="badge badge-sd">Son Dakika</span>` : '';
+  const priBadge  = r.is_priority            ? `<span class="badge badge-pri">⭐ Öncelikli</span>` : '';
+  const elBadge   = (r.elazig_bonus>1)       ? `<span class="badge badge-el">📍 Elazığ</span>` : '';
+  const riskBadge = (r.risk_filter<1)        ? `<span class="badge badge-risk">⚠ Risk</span>` : '';
+  const dmBadge   = (r.dm_potential>=1.4)    ? `<span class="badge badge-dm">DM↑</span>` : '';
+  const hoBadge   = `<span class="badge badge-ho">HO: ${fmtNum(r.score)}</span>`;
+
+  // Text
+  const text = (r.text||'').length>200 ? r.text.slice(0,197)+'…' : (r.text||'');
+
+  // Metrics
+  const ageLabel   = r.age_h<1 ? `${Math.round(r.age_h*60)} dk` : `${r.age_h} sa`;
+  const rateVal    = r.eng_rate||0;
+  const ratePct    = Math.min((rateVal/2)*100, 100);
+  const rateCls    = rateVal>=1 ? 'high' : rateVal>=0.3 ? 'med' : '';
+  const velocity   = r.velocity || 0;
+
+  // Çarpan etiketleri
+  const mults = [];
+  if (r.content_fit && r.content_fit!==1) mults.push({v:r.content_fit, l:`İçerik ×${r.content_fit}`});
+  if (r.elazig_bonus>1) mults.push({v:r.elazig_bonus, l:`Elazığ ×${r.elazig_bonus}`});
+  if (r.src_mult>1) mults.push({v:r.src_mult, l:`Kaynak ×${r.src_mult}`});
+  if (r.brk_mult>1) mults.push({v:r.brk_mult, l:`SD ×${r.brk_mult}`});
+  if (r.risk_filter<1) mults.push({v:r.risk_filter, l:`Risk ×${r.risk_filter}`});
+  const multHTML = mults.map(m=>`<span class="mult-tag ${m.v>=1.3?'pos':m.v<1?'neg':''}">${m.l}</span>`).join('');
+
+  const urlHtml = r.url ? `<a class="tweet-link" href="${r.url}" target="_blank">Tweet ↗</a>` : '';
 
   return `
   <div class="card ${cardCls}">
     <div class="card-top">
       <span class="rank">${rank}.</span>
       <span class="${srcCls}">@${r.username}</span>
-      ${hoBadge}${sdBadge}${priBadge}${elBadge}
+      ${hoBadge}${sdBadge}${priBadge}${elBadge}${riskBadge}${dmBadge}
     </div>
     <div class="card-text">${text}</div>
-    <div class="card-meta">
-      <span class="meta-item">🕐 ${ageLabel}</span>
-      <span class="meta-item">❤ ${r.likes}</span>
-      <span class="meta-item">🔁 ${r.retweets}</span>
-      <span class="meta-item">👁 ${fmtNum(r.views)}</span>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-val">${fmtNum(velocity)}</div>
+        <div class="metric-lbl">Hız/sa</div>
+      </div>
+      <div class="metric-div"></div>
+      <div class="metric">
+        <div class="metric-val">${fmtNum(r.likes||0)}</div>
+        <div class="metric-lbl">Beğeni</div>
+      </div>
+      <div class="metric-div"></div>
+      <div class="metric">
+        <div class="metric-val">${fmtNum(r.retweets||0)}</div>
+        <div class="metric-lbl">RT</div>
+      </div>
+      <div class="metric-div"></div>
+      <div class="metric">
+        <div class="metric-val">${fmtNum(r.views||0)}</div>
+        <div class="metric-lbl">Görüntüleme</div>
+      </div>
+      <div class="metric-div"></div>
+      <div class="metric">
+        <div class="eng-bar-wrap">
+          <div class="metric-val">%${rateVal}</div>
+          <div class="eng-bar"><div class="eng-bar-fill ${rateCls}" style="width:${ratePct}%"></div></div>
+        </div>
+        <div class="metric-lbl">Etk. Oranı</div>
+      </div>
+    </div>
+    ${multHTML ? `<div class="mult-row">${multHTML}</div>` : ''}
+    <div class="card-footer">
+      <span class="meta-item">🕐 ${ageLabel} önce</span>
       ${urlHtml}
-      <button class="haber-yaz-btn" onclick="haberYaz('${escapedText}','${r.username}','${escapedUrl}')">✍️ Haber Yaz</button>
+      <button class="haber-btn" onclick="haberYaz(${idx})">✍️ Haber Yaz</button>
     </div>
   </div>`;
 }
 
-function haberYaz(text, username, url) {
-  const prompt = `${text}\n\nKaynak: @${username}${url ? '\nURL: ' + url : ''}\n\nBu haberi Instagram, X (Twitter) ve Telegram için hazırla. Her platform için ayrı format yaz.`;
-  navigator.clipboard.writeText(prompt).then(() => {
-    showToast('📋 Kopyalandı — Claude\'a yapıştır, Ece yazacak');
-  }).catch(() => {
-    // Fallback: textarea ile kopyala
-    const ta = document.createElement('textarea');
-    ta.value = prompt;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    showToast('📋 Kopyalandı — Claude\'a yapıştır, Ece yazacak');
-  });
+// ── HABER YAZ ────────────────────────────────────────────────────────────
+function haberYaz(idx) {
+  const r = allResults[idx];
+  if (!r) return;
+  const prompt = `${r.text}\n\nKaynak: @${r.username}${r.url ? '\nURL: ' + r.url : ''}\nHO Skor: ${r.score}\n\nBu haberi Instagram, X (Twitter) ve Telegram için hazırla. Her platform için ayrı format yaz.`;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(prompt)
+      .then(()=>showToast('📋 Kopyalandı — Claude\'a yapıştır'))
+      .catch(()=>fallbackCopy(prompt));
+  } else {
+    fallbackCopy(prompt);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); showToast('📋 Kopyalandı — Claude\'a yapıştır'); }
+  catch(e) { showToast('Kopyalanamadı — metni elle seç'); }
+  document.body.removeChild(ta);
+}
+
+// ── YARDIMCI ─────────────────────────────────────────────────────────────
+function fmtNum(n) {
+  if (!n && n!==0) return '—';
+  if (n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if (n>=1e3) return Math.round(n/1e3)+'K';
+  return String(n);
 }
 
 function showToast(msg) {
-  let t = document.getElementById('toast');
-  if (!t) {
-    t = document.createElement('div');
-    t.id = 'toast';
-    t.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap';
-    document.body.appendChild(t);
-  }
-  t.textContent = msg;
-  t.style.opacity = '1';
-  setTimeout(() => t.style.opacity = '0', 2500);
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
 }
 
-function fmtNum(n) {
-  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
-  if (n >= 1e3) return Math.round(n/1e3)+'K';
-  return n;
-}
-
-// Sayfa yüklenince çek
 loadResults();
 </script>
 </body>
