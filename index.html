@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haberin Olsun — Haber Takip</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+         background: #f7f6f2; color: #111; font-size: 15px; min-height: 100vh; }
+
+  .header {
+    background: #fff; border-bottom: 1px solid #e9e7e0;
+    padding: 14px 16px; position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+  .scan-time { font-size: 12px; color: #888; }
+
+  .action-bar {
+    background: #fff; border-bottom: 1px solid #f0ede6;
+    padding: 10px 16px; display: flex; gap: 8px; align-items: center;
+  }
+  .tara-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #111; color: #fff; border: none; border-radius: 10px;
+    padding: 9px 18px; font-size: 14px; font-weight: 600;
+    text-decoration: none; cursor: pointer;
+  }
+  .refresh-btn {
+    background: #f7f6f2; color: #111; border: 1px solid #ddd;
+    border-radius: 10px; padding: 9px 16px; font-size: 14px;
+    cursor: pointer;
+  }
+  .hint { font-size: 12px; color: #aaa; margin-left: 4px; }
+
+  .filters {
+    background: #fff; border-bottom: 1px solid #f0ede6;
+    padding: 8px 16px; display: flex; gap: 6px; overflow-x: auto;
+  }
+  .filter-btn {
+    font-size: 12px; padding: 5px 14px; border-radius: 20px;
+    border: 1px solid #ddd; background: #f7f6f2;
+    color: #888; white-space: nowrap; cursor: pointer;
+  }
+  .filter-btn.active { background: #111; color: #fff; border-color: #111; }
+
+  .content { max-width: 680px; margin: 0 auto; padding: 16px; }
+
+  .stats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .stat { font-size: 12px; background: #fff; border: 1px solid #e9e7e0;
+          border-radius: 20px; padding: 5px 12px; color: #555; }
+  .stat b { color: #111; }
+
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.07em;
+    text-transform: uppercase; color: #bbb; margin: 20px 0 10px;
+  }
+
+  .card {
+    background: #fff; border: 1px solid #e9e7e0; border-radius: 14px;
+    padding: 14px 16px; margin-bottom: 8px;
+    transition: box-shadow 0.1s;
+  }
+  .card:active { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .card.breaking { border-left: 3px solid #d63031; }
+  .card.priority { background: #fafaf7; }
+
+  .card-top { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+  .rank { font-size: 13px; font-weight: 700; color: #111; min-width: 20px; }
+  .source { font-size: 13px; font-weight: 600; color: #555; }
+  .source.pri { color: #4a4a9a; }
+
+  .badge {
+    font-size: 10px; font-weight: 700; border-radius: 4px;
+    padding: 2px 7px; letter-spacing: 0.04em;
+  }
+  .badge-sd  { background: #fff0ef; color: #d63031; border: 1px solid #f0b0a8; }
+  .badge-ho  { background: #f7f6f2; color: #888; border: 1px solid #ddd; }
+  .badge-el  { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+  .badge-pri { background: #eef; color: #4a4a9a; border: 1px solid #c0c0f0; }
+
+  .card-text {
+    font-size: 14px; line-height: 1.55; color: #111;
+    margin-bottom: 10px;
+  }
+  .card-meta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .meta-item { font-size: 12px; color: #999; }
+  .tweet-link {
+    font-size: 12px; color: #4a4a9a; text-decoration: none;
+    margin-left: auto; font-weight: 500;
+  }
+
+  .empty { text-align: center; padding: 60px 20px; color: #aaa; }
+  .empty-title { font-size: 16px; color: #888; margin-bottom: 6px; }
+
+  .loading { text-align: center; padding: 40px; color: #888; font-size: 14px; }
+
+  @media (max-width: 400px) {
+    .content { padding: 12px; }
+    .card { padding: 12px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">Haberin Olsun</div>
+  <div class="scan-time" id="scan-time">Yükleniyor…</div>
+</div>
+
+<div class="action-bar">
+  <a class="tara-btn" id="tara-link" href="#" target="_blank">⚡ Manuel Tara</a>
+  <button class="refresh-btn" onclick="loadResults()">↻ Yenile</button>
+  <span class="hint">Tara → 30sn sonra yenile</span>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="setFilter('all',this)">Tümü</button>
+  <button class="filter-btn" onclick="setFilter('breaking',this)">⚡ Son Dakika</button>
+  <button class="filter-btn" onclick="setFilter('priority',this)">⭐ Öncelikli</button>
+  <button class="filter-btn" onclick="setFilter('elazig',this)">📍 Elazığ</button>
+</div>
+
+<div class="content">
+  <div id="stats" class="stats"></div>
+  <div id="results" class="loading">Haberler yükleniyor…</div>
+</div>
+
+<script>
+// GitHub repo bilgileri — kurulumdan sonra güncellenir
+const REPO_OWNER = "kudretdabakoglu-ai";
+const REPO_NAME  = "haberin-olsun-canli-takip";
+const WORKFLOW   = "ho-tarama.yml";
+
+let allResults = [];
+let activeFilter = 'all';
+
+// Manuel tara butonunu ayarla
+document.getElementById('tara-link').href =
+  `https://github.com/${REPO_OWNER}/${REPO_NAME}/actions/workflows/${WORKFLOW}`;
+
+async function loadResults() {
+  document.getElementById('scan-time').textContent = 'Yükleniyor…';
+  try {
+    const r = await fetch(`results.json?t=${Date.now()}`);
+    if (!r.ok) throw new Error('Sonuç bulunamadı');
+    const data = await r.json();
+    allResults = data.results || [];
+    document.getElementById('scan-time').textContent = data.scan_time_tr || '';
+    renderStats(data);
+    renderResults();
+  } catch(e) {
+    document.getElementById('results').innerHTML =
+      `<div class="empty"><div class="empty-title">Henüz tarama yapılmadı</div>
+       <div style="font-size:13px;margin-top:8px">GitHub Actions'tan "Manuel Tara" butonuna bas</div></div>`;
+    document.getElementById('scan-time').textContent = '—';
+  }
+}
+
+function renderStats(data) {
+  const breaking = allResults.filter(r => r.is_breaking).length;
+  const elazig   = allResults.filter(r => r.text.toLowerCase().includes('elazığ') || r.text.toLowerCase().includes('elazig')).length;
+  document.getElementById('stats').innerHTML = `
+    <span class="stat">Toplam: <b>${data.count}</b></span>
+    <span class="stat">⚡ Son Dakika: <b>${breaking}</b></span>
+    <span class="stat">📍 Elazığ: <b>${elazig}</b></span>
+  `;
+}
+
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderResults();
+}
+
+function renderResults() {
+  let list = allResults;
+  if (activeFilter === 'breaking') list = list.filter(r => r.is_breaking);
+  if (activeFilter === 'priority') list = list.filter(r => r.is_priority);
+  if (activeFilter === 'elazig')   list = list.filter(r =>
+    r.text.toLowerCase().includes('elazığ') || r.text.toLowerCase().includes('elazig') ||
+    r.text.toLowerCase().includes('harput'));
+
+  if (!list.length) {
+    document.getElementById('results').innerHTML =
+      `<div class="empty"><div class="empty-title">Bu filtrede haber yok</div></div>`;
+    return;
+  }
+
+  const breaking  = list.filter(r => r.is_breaking);
+  const priority  = list.filter(r => !r.is_breaking && r.is_priority);
+  const others    = list.filter(r => !r.is_breaking && !r.is_priority);
+
+  let html = '';
+  if (breaking.length) {
+    html += `<div class="section-label">⚡ Son Dakika</div>`;
+    html += breaking.map((r,i) => card(r, i+1)).join('');
+  }
+  if (priority.length) {
+    html += `<div class="section-label">⭐ Öncelikli — bpthaber · pusholder</div>`;
+    html += priority.map((r,i) => card(r, i+1)).join('');
+  }
+  if (others.length) {
+    const label = (breaking.length || priority.length) ? 'Diğer Haberler' : 'Haberler';
+    html += `<div class="section-label">${label}</div>`;
+    html += others.map((r,i) => card(r, i+1)).join('');
+  }
+
+  document.getElementById('results').innerHTML = html;
+}
+
+function card(r, rank) {
+  const sdBadge  = r.is_breaking ? `<span class="badge badge-sd">Son Dakika</span>` : '';
+  const priBadge = r.is_priority ? `<span class="badge badge-pri">⭐</span>` : '';
+  const elBadge  = (r.text.toLowerCase().includes('elazığ') || r.text.toLowerCase().includes('elazig'))
+                   ? `<span class="badge badge-el">📍 Elazığ</span>` : '';
+  const hoBadge  = `<span class="badge badge-ho">HO: ${r.score}</span>`;
+  const srcCls   = r.is_priority ? 'source pri' : 'source';
+  const cardCls  = [r.is_breaking ? 'breaking' : '', r.is_priority ? 'priority' : ''].filter(Boolean).join(' ');
+  const ageLabel = r.age_h < 1 ? `${Math.round(r.age_h*60)} dk önce` : `${r.age_h} sa önce`;
+  const text     = r.text.length > 200 ? r.text.slice(0,197) + '…' : r.text;
+  const urlHtml  = r.url ? `<a class="tweet-link" href="${r.url}" target="_blank">Tweet ↗</a>` : '';
+
+  return `
+  <div class="card ${cardCls}">
+    <div class="card-top">
+      <span class="rank">${rank}.</span>
+      <span class="${srcCls}">@${r.username}</span>
+      ${hoBadge}${sdBadge}${priBadge}${elBadge}
+    </div>
+    <div class="card-text">${text}</div>
+    <div class="card-meta">
+      <span class="meta-item">🕐 ${ageLabel}</span>
+      <span class="meta-item">❤ ${r.likes}</span>
+      <span class="meta-item">🔁 ${r.retweets}</span>
+      <span class="meta-item">👁 ${fmtNum(r.views)}</span>
+      ${urlHtml}
+    </div>
+  </div>`;
+}
+
+function fmtNum(n) {
+  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+  if (n >= 1e3) return Math.round(n/1e3)+'K';
+  return n;
+}
+
+// Sayfa yüklenince çek
+loadResults();
+</script>
+</body>
+</html>
