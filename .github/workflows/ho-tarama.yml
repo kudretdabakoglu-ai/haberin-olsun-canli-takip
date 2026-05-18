@@ -2,8 +2,8 @@ name: Haberin Olsun — Otomatik Tarama
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
-  workflow_dispatch:
+    - cron: '*/30 * * * *'   # Her 30 dakikada bir
+  workflow_dispatch:           # Manuel tetikleme butonu
 
 permissions:
   contents: write
@@ -28,10 +28,10 @@ jobs:
           GETX_API_KEY: ${{ secrets.GETX_API_KEY }}
         run: python ho_scan_once.py
 
-      - name: Sonuçları kaydet
+      - name: Sonuçları kaydet (commit & push)
         run: |
           git config user.name "Haberin Olsun Bot"
           git config user.email "bot@noreply.com"
-          git add docs/results.json
+          git add results.json
           git diff --staged --quiet || git commit -m "Tarama: $(date -u '+%Y-%m-%d %H:%M') UTC"
           git push
