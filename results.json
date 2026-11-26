@@ -1,45 +1,6 @@
 {
-  "scan_time": "2026-11-26T05:15:18Z",
-  "scan_time_tr": "26.11.2026 05:15",
-  "count": 2,
-  "results": [
-    {
-      "username": "pusholder",
-      "text": "GSS prim borçlarının silinmesini öngören kanun teklifinin TBMM Genel Kurulunda görüşmelerine başlandı.\n\nTeklifin yasalaşmasıyla yaklaşık 2,2 milyon vatandaşın prim borçları, gecikme cezaları ve zamları dahil toplam 5,6 milyar TL’lik borcu silinecek.",
-      "url": "https://x.com/pusholder/status/2125820097008955512",
-      "score": 34,
-      "age_h": 0.2,
-      "is_breaking": false,
-      "is_priority": true,
-      "likes": 3,
-      "retweets": 0,
-      "views": 9654,
-      "velocity": 12.0,
-      "eng_rate": 0.03,
-      "content_fit": 2.5,
-      "elazig_bonus": 1.0,
-      "risk_filter": 1.0,
-      "src_mult": 1.4,
-      "brk_mult": 1.0
-    },
-    {
-      "username": "bpthaber",
-      "text": "Elon Musk: \"Amerika'daki her çocuğa iki SpaceX hissesi verilecek.\n\nHisselerden biri şirketten, diğeri ise şahsen benden olacak.\" https://t.co/KbVE20QVbO",
-      "url": "https://x.com/bpthaber/status/2125817687855202605",
-      "score": 29,
-      "age_h": 0.2,
-      "is_breaking": false,
-      "is_priority": true,
-      "likes": 17,
-      "retweets": 1,
-      "views": 8138,
-      "velocity": 84.0,
-      "eng_rate": 0.26,
-      "content_fit": 0.3,
-      "elazig_bonus": 1.0,
-      "risk_filter": 1.0,
-      "src_mult": 1.4,
-      "brk_mult": 1.0
-    }
-  ]
+  "scan_time": "2026-11-26T15:31:54Z",
+  "scan_time_tr": "26.11.2026 15:31",
+  "count": 0,
+  "results": []
 }
